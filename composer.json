@@ -1,8 +1,9 @@
 {
-	"name" : "avored/framework",
-	"description" : "AvoRed Laravel E commerce Framework",
+	"name" : "avored/graphql",
+	"description" : "AvoRed Laravel Shopping Cart Graphql API",
 	"keywords" : [
-		"framework",
+		"graphql",
+		"api",
 		"cart",
 		"laravel",
 		"e commerce",
@@ -47,17 +48,8 @@
 	"extra" : {
 		"laravel" : {
 			"providers" : [
-				"AvoRed\\Framework\\AvoRedProvider"
-			],
-			"aliases" : {
-				"Breadcrumb" : "AvoRed\\Framework\\Support\\Facades\\Breadcrumb",
-				"Cart" : "AvoRed\\Framework\\Support\\Facades\\Cart",
-				"Menu" : "AvoRed\\Framework\\Support\\Facades\\Menu",
-				"Module" : "AvoRed\\Framework\\Support\\Facades\\Module",
-				"Permission" : "AvoRed\\Framework\\Support\\Facades\\Permission",
-				"Payment" : "AvoRed\\Framework\\Support\\Facades\\Payment",
-				"Shipping" : "AvoRed\\Framework\\Support\\Facades\\Shipping"
-			}
+				"AvoRed\\Graphql\\GraphqlProvider"
+			]
 		}
 	},
 	"homepage" : "https://www.avored.com",
