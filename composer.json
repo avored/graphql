@@ -32,9 +32,6 @@
 		"mockery/mockery" : "1.2.*"
 	},
 	"autoload" : {
-		"classmap": [
-            "database/factories"
-        ],
 		"psr-4" : {
 			"AvoRed\\Graphql\\" : "src/"
 			
