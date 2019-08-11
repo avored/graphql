@@ -1,34 +1,23 @@
 <?php
-
 namespace AvoRed\Graphql;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\App;
+use Rebing\GraphQL\GraphQL;
 
-class GraphqlProvider extends ServiceProvider
+class GraphqlProvider extends ServiceProvider implements DeferrableProvider
 {
-    /**
-     * Providers List for the Framework
-     * @var array $providers
-     */
-    protected $providers = [
-        //\AvoRed\Framework\Support\Providers\BreadcrumbProvider::class,
-    ];
-
-
     /**
      * Register services.
      * @return void
      */
     public function register()
     {
-        // $this->registerProviders();
-        // $this->registerConfigData();
-        // $this->registerRoutePath();
+        $this->registerRebingGraphqlProvider();
+        $this->registerConfigData();
         // $this->registerMiddleware();
-        // $this->registerViewComposerData();
-        // $this->registerConsoleCommands();
-        // $this->registerMigrationPath();
-        // $this->registerViewPath();
+        $this->registerGraphqlData();
     }
 
     /**
@@ -37,65 +26,53 @@ class GraphqlProvider extends ServiceProvider
      */
     public function boot()
     {
-        // $this->registerTranslationPath();
         // $this->setupPublishFiles();
     }
 
     /**
-     * Register Route Path.
+     * Registering Dynamic Schemas & Types
+     * @param \Rebing\GraphQL\GraphQL $graphql
      * @return void
      */
-    public function registerRoutePath()
+    public function registerGraphqlData(): void
     {
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->app->afterResolving('graphql', function (GraphQL $graphql) {
+            $this->bootSchemas($graphql);
+            $this->bootTypes($graphql);
+        });
     }
 
     /**
-     * Register Console Commands.
+     * Add types from config.
+     * @param \Rebing\GraphQL\GraphQL $graphql
      * @return void
      */
-    public function registerConsoleCommands()
+    protected function bootTypes(GraphQL $graphql): void
     {
-        $this->commands([InstallCommand::class]);
-        $this->commands([AdminMakeCommand::class]);
+        $configTypes = config('avored-graphql.types');
+        $graphql->addTypes($configTypes);
     }
 
     /**
-     * Register Migration Path.
+     * Add schemas from config.
+     * @param \Rebing\GraphQL\GraphQL $graphql
      * @return void
      */
-    public function registerMigrationPath()
+    protected function bootSchemas(GraphQL $graphql): void
     {
-        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-    }
-
-    /**
-     * Register View Path.
-     * @return void
-     */
-    public function registerViewPath()
-    {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'avored');
-    }
-
-    /**
-     * Register Translation Path.
-     * @return void
-     */
-    public function registerTranslationPath()
-    {
-        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'avored');
-    }
-
-    /**
-     * Registering AvoRed E commerce Service Provider
-     * @return void
-     */
-    protected function registerProviders()
-    {
-        foreach ($this->providers as $provider) {
-            App::register($provider);
+        $configSchemas = config('avored-graphql.schemas');
+        foreach ($configSchemas as $name => $schema) {
+            $graphql->addSchema($name, $schema);
         }
+    }
+
+    /**
+     * Rebing Grahpql Service Provider to Add Dynamic Schema and register types,query & mutation
+     * @return void
+     */
+    protected function registerRebingGraphqlProvider(): void
+    {
+        App::register(\Rebing\GraphQL\GraphQLServiceProvider::class);
     }
 
     /**
@@ -117,22 +94,8 @@ class GraphqlProvider extends ServiceProvider
     public function registerConfigData()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/avored.php',
-            'avored'
-        );
-        $avoredConfigData = include __DIR__ . '/../config/avored.php';
-        $fileSystemConfig = $this->app['config']->get('filesystems', []);
-        $authConfig = $this->app['config']->get('auth', []);
-        $this->app['config']->set(
-            'filesystems',
-            array_merge_recursive(
-                $avoredConfigData['filesystems'],
-                $fileSystemConfig
-            )
-        );
-        $this->app['config']->set(
-            'auth',
-            array_merge_recursive($avoredConfigData['auth'], $authConfig)
+            __DIR__ . '/../config/avored-graphql.php',
+            'avored-graphql'
         );
     }
 
