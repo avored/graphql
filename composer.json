@@ -24,6 +24,7 @@
 	"require" : {
 		"php" : ">=7.1.3",
 		"avored/framework": "3.*",
+		"laravel/passport": "^7.3",
 		"rebing/graphql-laravel": "^2.0"
 	},
 	"require-dev" : {

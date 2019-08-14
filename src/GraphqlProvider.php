@@ -5,8 +5,9 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\App;
 use Rebing\GraphQL\GraphQL;
+use Laravel\Passport\Passport;
 
-class GraphqlProvider extends ServiceProvider implements DeferrableProvider
+class GraphqlProvider extends ServiceProvider
 {
     /**
      * Register services.
@@ -14,8 +15,8 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
      */
     public function register()
     {
-        $this->registerRebingGraphqlProvider();
         $this->registerConfigData();
+        $this->registerRebingGraphqlProvider();
         // $this->registerMiddleware();
         $this->registerGraphqlData();
     }
@@ -26,7 +27,8 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
      */
     public function boot()
     {
-        // $this->setupPublishFiles();
+        //dd(config('grahpql'));
+        Passport::routes();
     }
 
     /**
@@ -36,10 +38,10 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
      */
     public function registerGraphqlData(): void
     {
-        $this->app->afterResolving('graphql', function (GraphQL $graphql) {
-            $this->bootSchemas($graphql);
-            $this->bootTypes($graphql);
-        });
+        // $this->app->afterResolving('graphql', function (GraphQL $graphql) {
+        //     $this->bootSchemas($graphql);
+        //     $this->bootTypes($graphql);
+        // });
     }
 
     /**
@@ -49,7 +51,7 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function bootTypes(GraphQL $graphql): void
     {
-        $configTypes = config('avored-graphql.types');
+        $configTypes = config('graphql.types');
         $graphql->addTypes($configTypes);
     }
 
@@ -60,7 +62,7 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function bootSchemas(GraphQL $graphql): void
     {
-        $configSchemas = config('avored-graphql.schemas');
+        $configSchemas = config('graphql.schemas');
         foreach ($configSchemas as $name => $schema) {
             $graphql->addSchema($name, $schema);
         }
@@ -72,7 +74,7 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
      */
     protected function registerRebingGraphqlProvider(): void
     {
-        App::register(\Rebing\GraphQL\GraphQLServiceProvider::class);
+        App::register(\Rebing\GraphQL\GraphQLServiceProvider::class, true);
     }
 
     /**
@@ -95,17 +97,15 @@ class GraphqlProvider extends ServiceProvider implements DeferrableProvider
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../config/avored-graphql.php',
-            'avored-graphql'
+            'graphql'
         );
-    }
-
-    /**
-     * Registering Class Based View Composer.
-     * @return void
-     */
-    public function registerViewComposerData()
-    {
-        View::composer('avored::layouts.app', LayoutComposer::class);
+        
+        $avoredConfigData = include __DIR__ . '/../config/avored-graphql.php';
+        $authConfig = $this->app['config']->get('auth', []);
+        $this->app['config']->set(
+            'auth',
+            array_merge_recursive($avoredConfigData['auth'], $authConfig)
+        );
     }
 
    /**
