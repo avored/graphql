@@ -17,6 +17,7 @@ return [
         'default' => [
             'query' => [
                 'menu' => \AvoRed\Graphql\Queries\MenuQuery::class,
+                'allCategory' => \AvoRed\Graphql\Queries\AllCategoryQuery::class,
             ],
             'mutation' => [
                 // 'example_mutation'  => ExampleMutation::class,
@@ -42,5 +43,8 @@ return [
     //
     'types' => [
         'menu' => AvoRed\Graphql\Types\MenuType::class,
+        'category' => AvoRed\Graphql\Types\CategoryType::class,
+        'filter' => AvoRed\Graphql\Types\FilterType::class,
+        'product' => AvoRed\Graphql\Types\ProductType::class,
     ],
 ];
