@@ -18,13 +18,13 @@ class CategoryQuery extends Query
     ];
 
     /**
-     * Menu Group Repository
+     * Category Repository
      * @var AvoRed\Framework\Database\Repository\CategoryRepository
      */
     protected $categoryRepository;
 
     /**
-     * Menu Query construct
+     * Category Query construct
      * @param \AvoRed\Framework\Database\Contracts\CategoryModelInterface $categoryRepository
      * @return void
      */

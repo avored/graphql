@@ -1,36 +1,36 @@
 <?php
 namespace AvoRed\Graphql\Queries;
 
-use AvoRed\Framework\Database\Contracts\CategoryModelInterface;
+use AvoRed\Framework\Database\Contracts\ProductModelInterface;
+use AvoRed\Framework\Database\Models\Product;
 use Closure;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
-use Illuminate\Database\Eloquent\Collection;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\SelectFields;
 use Rebing\GraphQL\Support\Query;
 
-class AllCategoryQuery extends Query
+class ProductQuery extends Query
 {
     protected $attributes = [
-        'name' => 'allCategory',
+        'name' => 'Product',
         'description' => 'A query'
     ];
 
     /**
-     * Category Repository
-     * @var AvoRed\Framework\Database\Repository\CategoryRepository
+     * Product Repository
+     * @var AvoRed\Framework\Database\Repository\ProductRepository
      */
-    protected $categoryRepository;
+    protected $productRepository;
 
     /**
-     * All Category construct
-     * @param \AvoRed\Framework\Database\Contracts\CategoryModelInterface $categoryRepository
+     * Product Query construct
+     * @param \AvoRed\Framework\Database\Contracts\ProductModelInterface $productRepository
      * @return void
      */
-    public function __construct(CategoryModelInterface $categoryRepository)
+    public function __construct(ProductModelInterface $productRepository)
     {
-        $this->categoryRepository = $categoryRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
@@ -39,7 +39,7 @@ class AllCategoryQuery extends Query
      */
     public function type(): Type
     {
-        return Type::listOf(GraphQL::type('category'));
+        return GraphQL::type('product');
     }
 
     /**
@@ -48,7 +48,12 @@ class AllCategoryQuery extends Query
      */
     public function args(): array
     {
-        return [];
+        return [
+            'slug' => [
+                'name' => 'slug',
+                'type' => Type::nonNull(Type::string())
+            ],
+        ];
     }
 
     /**
@@ -60,8 +65,8 @@ class AllCategoryQuery extends Query
      * @param midex $getSelectFields
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): Collection
+    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): Product
     {
-        return $this->categoryRepository->all();
+        return $this->productRepository->findBySlug($args['slug']);
     }
 }
