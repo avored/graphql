@@ -23,6 +23,7 @@ return [
             ],
             'mutation' => [
                 // 'example_mutation'  => ExampleMutation::class,
+                'login' => \AvoRed\Graphql\Mutations\Auth\LoginMutation::class,
             ],
             'middleware' => [],
             'method'     => ['get', 'post'],
@@ -30,7 +31,6 @@ return [
         'guest' => [
             'query' => [],
             'mutation' => [
-                'login' => \AvoRed\Graphql\Mutations\Auth\LoginMutation::class,
                 // 'example_mutation'  => ExampleMutation::class,
             ],
             'middleware' => [],
@@ -48,5 +48,6 @@ return [
         'category' => AvoRed\Graphql\Types\CategoryType::class,
         'filter' => AvoRed\Graphql\Types\FilterType::class,
         'product' => AvoRed\Graphql\Types\ProductType::class,
+        'token' => AvoRed\Graphql\Types\TokenType::class,
     ],
 ];
