@@ -18,6 +18,7 @@ return [
             'query' => [
                 'menu' => \AvoRed\Graphql\Queries\MenuQuery::class,
                 'allCategory' => \AvoRed\Graphql\Queries\AllCategoryQuery::class,
+                'category' => \AvoRed\Graphql\Queries\CategoryQuery::class,
             ],
             'mutation' => [
                 // 'example_mutation'  => ExampleMutation::class,
