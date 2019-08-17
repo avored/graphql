@@ -28,12 +28,14 @@ return [
             'middleware' => [],
             'method'     => ['get', 'post'],
         ],
-        'guest' => [
-            'query' => [],
+        'secret' => [
+            'query' => [
+                'order' => \AvoRed\Graphql\Queries\OrderQuery::class,
+            ],
             'mutation' => [
                 // 'example_mutation'  => ExampleMutation::class,
             ],
-            'middleware' => [],
+            'middleware' => ['auth:api'],
             'method'     => ['get', 'post'],
         ],
     ],
@@ -50,5 +52,6 @@ return [
         'product' => AvoRed\Graphql\Types\ProductType::class,
         'token' => AvoRed\Graphql\Types\TokenType::class,
         'cartProduct' => AvoRed\Graphql\Types\CartProductType::class,
+        'order' => AvoRed\Graphql\Types\OrderType::class,
     ],
 ];
