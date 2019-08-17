@@ -22,8 +22,8 @@ return [
                 'product' => \AvoRed\Graphql\Queries\ProductQuery::class,
             ],
             'mutation' => [
-                // 'example_mutation'  => ExampleMutation::class,
                 'login' => \AvoRed\Graphql\Mutations\Auth\LoginMutation::class,
+                'addToCart' => \AvoRed\Graphql\Mutations\Cart\AddToCartMutation::class,
             ],
             'middleware' => [],
             'method'     => ['get', 'post'],
@@ -49,5 +49,6 @@ return [
         'filter' => AvoRed\Graphql\Types\FilterType::class,
         'product' => AvoRed\Graphql\Types\ProductType::class,
         'token' => AvoRed\Graphql\Types\TokenType::class,
+        'cartProduct' => AvoRed\Graphql\Types\CartProductType::class,
     ],
 ];
