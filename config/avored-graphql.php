@@ -53,5 +53,6 @@ return [
         'token' => AvoRed\Graphql\Types\TokenType::class,
         'cartProduct' => AvoRed\Graphql\Types\CartProductType::class,
         'order' => AvoRed\Graphql\Types\OrderType::class,
+        'address' => AvoRed\Graphql\Types\AddressType::class,
     ],
 ];

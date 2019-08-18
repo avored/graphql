@@ -2,13 +2,13 @@
 namespace AvoRed\Graphql\Types;
 
 use AvoRed\Framework\Database\Contracts\CategoryFilterModelInterface;
+use AvoRed\Framework\Database\Models\Order;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class OrderType extends GraphQLType
 {
-
     /**
      * Attribute for Order Type
      * @var array
@@ -18,10 +18,10 @@ class OrderType extends GraphQLType
         'description' => 'A type'
     ];
 
-     /**
-     * Fields for Order Type
-     * @return array $fields
-     */
+    /**
+    * Fields for Order Type
+    * @return array $fields
+    */
     public function fields(): array
     {
         return [
@@ -49,9 +49,17 @@ class OrderType extends GraphQLType
                 'type' => Type::nonNull(Type::int()),
                 'description' => 'Order Shipping Address Id'
             ],
+            'shipping_address' => [
+                'type' => Type::nonNull(GraphQL::type('address')),
+                'description' => 'Order Shipping Address'
+            ],
             'billing_address_id' => [
                 'type' => Type::nonNull(Type::int()),
                 'description' => 'Order Billing Address Id'
+            ],
+            'billing_address' => [
+                'type' => GraphQL::type('address'),
+                'description' => 'Order Billing Address'
             ],
             'track_code' => [
                 'type' => Type::string(),
@@ -76,5 +84,25 @@ class OrderType extends GraphQLType
     protected function resolveTaxAmountField(Order $order, $args)
     {
         return $order->taxAmount();
+    }
+
+    /**
+     * @param \AvoRed\Framework\Database\Models\Order $order
+     * @param array $args
+     * @return string $taxAmount
+     */
+    protected function resolveBillingAddressField(Order $order, $args)
+    {
+        return $order->billingAddress;
+    }
+
+    /**
+     * @param \AvoRed\Framework\Database\Models\Order $order
+     * @param array $args
+     * @return string $taxAmount
+     */
+    protected function resolveShippingAddressField(Order $order, $args)
+    {
+        return $order->shippingAddress;
     }
 }
