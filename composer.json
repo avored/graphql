@@ -8,6 +8,7 @@
 		"laravel",
 		"e commerce",
 		"laravel5",
+		"laravel6",
 		"shop",
 		"shopping-cart",
 		"e-commerce",
@@ -23,7 +24,7 @@
 	"type" : "library",
 	"require" : {
 		"php": ">=7.2",
-		"avored/framework": "^3.1",
+		"avored/framework": "^3.0",
 		"laravel/passport": "^8.0",
 		"rebing/graphql-laravel": "^3.1"
 	},
