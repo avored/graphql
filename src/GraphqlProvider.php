@@ -95,16 +95,16 @@ class GraphqlProvider extends ServiceProvider
      */
     public function registerConfigData()
     {
-        $this->mergeConfigFrom(
-            __DIR__ . '/../config/avored-graphql.php',
-            'graphql'
-        );
-        
         $avoredConfigData = include __DIR__ . '/../config/avored-graphql.php';
         $authConfig = $this->app['config']->get('auth', []);
         $this->app['config']->set(
             'auth',
             array_merge_recursive($avoredConfigData['auth'], $authConfig)
+        );
+        $graphqlConfig = $this->app['config']->get('graphql', []);
+        $this->app['config']->set(
+            'graphql',
+            array_merge_recursive($avoredConfigData['graphql'], $graphqlConfig)
         );
     }
 
